@@ -7,6 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -19,6 +20,8 @@ import java.awt.event.ActionListener;
 import lifegame.core.*;
 
 public class WinPop extends JFrame{
+	public JButton auto;
+	
 	public WinPop() {
 		super("GameStat");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,7 +37,6 @@ public class WinPop extends JFrame{
                 Main.turn();
             }
 		});
-		
 		add(nextTurnBTN);
 		setVisible(true);
 		JButton close = new JButton("Close");
@@ -46,6 +48,16 @@ public class WinPop extends JFrame{
                 System.exit(0);
             }
 		});
-		add(close);		
+		add(close);
+		auto = new JButton("Auto");
+		auto.setSize(100,25);
+		auto.setLocation(50,125);
+		auto.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                Main.changeGameState();
+            }
+		});
+		add(auto);
 	}
 }

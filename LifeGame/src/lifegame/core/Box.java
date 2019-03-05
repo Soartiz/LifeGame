@@ -19,16 +19,4 @@ public class Box {
 		}
 		
 	}
-
-	@Override
-	public String toString() {
-		if(full) {
-			return " X ";
-		}
-		return "   ";
-	}
-	
-	
-	
-	
 }

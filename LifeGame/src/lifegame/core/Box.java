@@ -2,13 +2,12 @@ package lifegame.core;
 
 public class Box {
 
-	public static boolean full = false;
-	public static boolean fullAfterProcess;
-	public int count = 0;
+	public boolean full = false;
+	public boolean fullAfterProcess;
 	
 	public void process(int x, int y) {
 		
-		count = Main.howMuchCaseIsNear(x, y);
+		int count = Main.howMuchCaseIsNear(x, y);
 		if(count == 3 && full == false) {
 			fullAfterProcess = true;
 		}
@@ -26,7 +25,7 @@ public class Box {
 		if(full) {
 			return " X ";
 		}
-		return "    ";
+		return "   ";
 	}
 	
 	

@@ -30,7 +30,7 @@ public class WinPop extends JFrame{
 	public WinPop() {
 		super("GameStat");
 
-        setLayout(new GridLayout(5, 0));
+        setLayout(new GridLayout(6, 0));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(200, 200);
 		setVisible(true);
@@ -56,6 +56,19 @@ public class WinPop extends JFrame{
             }
 		});
 		add(save);
+		JButton load = new JButton("Load");
+		load.addActionListener(new ActionListener() {
+			@Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+					Main.Load();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            }
+		});
+		add(load);
 		JButton close = new JButton("Close");
 		close.addActionListener(new ActionListener() {
 			@Override

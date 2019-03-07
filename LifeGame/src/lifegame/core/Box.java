@@ -34,8 +34,16 @@ public class Box {
 	
 	public String toString() {
 		if(full) {
-			return " X ";
+			return "X";
 		}
-		return "   ";
+		return "O";
+	}
+	
+	public Box(char state) {
+		if(state == 'X') {
+			full = true;
+		}else {
+			full = false;
+		}
 	}
 }

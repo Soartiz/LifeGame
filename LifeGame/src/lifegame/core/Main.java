@@ -2,7 +2,12 @@ package lifegame.core;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lifegame.graphic.*;
 
@@ -21,7 +26,6 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException, IOException {	
 		
 		long last_time = System.nanoTime();
-	
 		CreatePlat();
 		fenetrePop = new WinPop();
 		while(true) {
@@ -97,16 +101,51 @@ public class Main {
 			fenetre = new Window();
 			createBoard();
 		}
+		fenetre.setButtons();
 	}
 	public static void Save() throws IOException {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter("gameOfLife.txt"));
-		writer.write(boardToString());
+		writer.write(boadToString());
 		writer.close();		
 	}
 	
+	public static void Load() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader("gameOfLife.txt"));
+		String line = "";
+		List<String> tab = new ArrayList<String>();
+		while((line = reader.readLine()) != null) {
+			tab.add(line);
+		}
+		gameBoard = stringToBoard(tab);
+		fenetre.setButtons();
+		
+	}
+	private static Box[][] stringToBoard(List<String> line){
+		Box[][] board = new Box[line.get(0).length()][line.size()];
+		for(int i = 0; i < boardSizeX ; i++) {
+			String currentLine = line.get(i);
+			for(int j = 0 ; j < boardSizeY ; j++) {
+				board[i][j] = new Box(currentLine.charAt(j));
+			}
+		}
+		
+		return board;
+	}
+	private static String boadToString() {
+		
+		String s = "";
+		for(int i = 0; i < boardSizeX ; i++) {
+			for(int j = 0 ; j < boardSizeY ; j++) {
+				s += gameBoard[i][j].toString();
+			}
+			s += "\n";
+		}
+		return s;
+	}
 	
-	private static String boardToString() {
+	
+	private static String boardToBeautifullString() {
 		String s = "|   |";
 		for(int i = 0; i < boardSizeX ; i++) {
 			s += " " + i + " |";
@@ -126,7 +165,7 @@ public class Main {
 		gameBoard = new Box[boardSizeX][boardSizeY];
 		for(int i = 0; i < boardSizeX ; i++) {
 			for(int j = 0 ; j < boardSizeY ; j++) {
-				gameBoard[i][j] = new Box();
+				gameBoard[i][j] = new Box('O');
 			}
 		}
 	}

@@ -2,8 +2,8 @@ package lifegame.core;
 
 public class Box {
 
-	public boolean full = false;
-	public boolean fullAfterProcess;
+	private boolean full = false;
+	private boolean fullAfterProcess;
 	
 	public void process(int x, int y) {
 		
@@ -17,6 +17,25 @@ public class Box {
 		else if((count == 2 || count == 3) && full == true) {
 			fullAfterProcess = true;
 		}
-		
+	}
+	
+	public void setFull(boolean _full) {
+		full = _full;
+	}
+	public boolean getFull() {
+		return full;
+	}
+	public void setFullAfterProcess(boolean _full) {
+		fullAfterProcess = _full;
+	}
+	public boolean getFullAfterProcess() {
+		return fullAfterProcess;
+	}
+	
+	public String toString() {
+		if(full) {
+			return " X ";
+		}
+		return "   ";
 	}
 }

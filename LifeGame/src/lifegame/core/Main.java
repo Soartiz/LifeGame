@@ -1,5 +1,9 @@
 package lifegame.core;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import lifegame.graphic.*;
 
 public class Main {
@@ -8,22 +12,21 @@ public class Main {
 	public static Window fenetre;
 	public static WinPop fenetrePop;
 	
-	public static int boardSize = 50;
+	public static int boardSizeX = 10;
+	public static int boardSizeY = 10;
 	public static boolean gameState = false;
+	public static int sleepTime = 250;
+
 	
-	public static void main(String[] args) throws InterruptedException {	
+	public static void main(String[] args) throws InterruptedException, IOException {	
 		
 		long last_time = System.nanoTime();
-		
-		createBoard();
-		fenetre = new Window();
+	
+		CreatePlat();
 		fenetrePop = new WinPop();
 		while(true) {
-			System.out.println(gameState);
-			if(gameState) {
-				turn();
-				Thread.sleep(500);
-			}
+			turn(false);
+			Thread.sleep(sleepTime);
 		}
 		
 	}
@@ -41,18 +44,20 @@ public class Main {
 	/*
 	 * Turn permet de jouer un instant de vie
 	 * */
-	public static void turn() {
-		for(int i = 0; i < boardSize ; i++) {
-			for(int j = 0 ; j < boardSize ; j++) {
-				gameBoard[i][j].process(j, i);
+	public static void turn(boolean forced) {
+		if(gameState || forced) {
+			for(int i = 0; i < boardSizeX ; i++) {
+				for(int j = 0 ; j < boardSizeY ; j++) {
+					gameBoard[i][j].process(j, i);
+				}
 			}
-		}
-		for(int i = 0; i < boardSize ; i++) {
-			for(int j = 0 ; j < boardSize ; j++) {
-				gameBoard[i][j].full = gameBoard[i][j].fullAfterProcess;
+			for(int i = 0; i < boardSizeX ; i++) {
+				for(int j = 0 ; j < boardSizeY ; j++) {
+					gameBoard[i][j].setFull(gameBoard[i][j].getFullAfterProcess());
+				}
 			}
+			fenetre.setButtons();
 		}
-		fenetre.setButtons();
 	}
 
 	/*
@@ -62,8 +67,8 @@ public class Main {
 		int count = 0;
 		for(int i = -1; i < 2; i++ ) { // => Y
 			for(int j = -1; j < 2 ; j++) { // => X
-				if((y + i >= 0 && y + i < boardSize) && (x + j >= 0 && x + j < boardSize) && (j != 0 || i !=0)) {
-					if(gameBoard[y + i][x + j].full) {
+				if((y + i >= 0 && y + i < boardSizeY) && (x + j >= 0 && x + j < boardSizeX) && (j != 0 || i !=0)) {
+					if(gameBoard[y + i][x + j].getFull()) {
 						// System.out.println((y + i) + "_" + (x + j));
 						count += 1;
 					}					
@@ -79,15 +84,48 @@ public class Main {
     	String[] test = place.split("_");
     	int x = Integer.parseInt(test[0]);
     	int y = Integer.parseInt(test[1]);
-    	
-		gameBoard[x][y].full = !gameBoard[x][y].full;
+		gameBoard[x][y].setFull(!gameBoard[x][y].getFull());
 		fenetre.setButtons();
 	}
 	
+	public static void sliderAffect(int test) {
+		sleepTime = test;
+	}
+	
+	public static void CreatePlat() {
+		if(fenetre == null) {
+			fenetre = new Window();
+			createBoard();
+		}
+	}
+	public static void Save() throws IOException {
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter("gameOfLife.txt"));
+		writer.write(boardToString());
+		writer.close();		
+	}
+	
+	
+	private static String boardToString() {
+		String s = "|   |";
+		for(int i = 0; i < boardSizeX ; i++) {
+			s += " " + i + " |";
+		}
+		s += "\n";
+		for(int i = 0; i < boardSizeX ; i++) {
+			s += "| " + i + " |";
+			for(int j = 0 ; j < boardSizeY ; j++) {
+				s += gameBoard[i][j].toString();
+				s += "|";
+			}
+			s += "\n";
+		}
+		return s;
+	}
 	private static void createBoard() {
-		gameBoard = new Box[boardSize][boardSize];
-		for(int i = 0; i < boardSize ; i++) {
-			for(int j = 0 ; j < boardSize ; j++) {
+		gameBoard = new Box[boardSizeX][boardSizeY];
+		for(int i = 0; i < boardSizeX ; i++) {
+			for(int j = 0 ; j < boardSizeY ; j++) {
 				gameBoard[i][j] = new Box();
 			}
 		}
